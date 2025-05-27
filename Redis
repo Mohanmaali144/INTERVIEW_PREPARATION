@@ -1,1 +1,19 @@
+Redis Interview Questions & Answer 
+
+
+---
+
+1. What is Redis?
+
+Answer:
+Redis is a super fast, open-source, in-memory key-value data store. It is often used as a cache, message broker, or real-time database.
+
+
+2. Why is Redis so fast?
+
+Answer:
+Because Redis stores all data in RAM (memory) and uses very efficient data structures. No disk read/write is needed for normal operations.
+
+
+3. What are the data types in Redis?
 
