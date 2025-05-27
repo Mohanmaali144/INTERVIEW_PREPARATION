@@ -1,7 +1,6 @@
 Redis Interview Questions & Answer 
 
 
----
 
 1. What is Redis?
 
@@ -16,4 +15,198 @@ Because Redis stores all data in RAM (memory) and uses very efficient data struc
 
 
 3. What are the data types in Redis?
+
+Answer :
+# ============================================
+# 1️⃣ STRING (Basic key-value)
+# ============================================
+
+SET key "value"
+GET key
+SETNX key "only-if-not-exists"
+SETEX key 60 "expires-in-60s"
+PSETEX key 1500 "expires-in-1500ms"
+GETSET key "new-value"
+STRLEN key
+
+INCR key
+INCRBY key 10
+DECR key
+DECRBY key 5
+
+APPEND key "more-text"
+MSET key1 "v1" key2 "v2"
+MGET key1 key2
+
+
+# ============================================
+# 2️⃣ LIST (Ordered collection)
+# ============================================
+
+LPUSH mylist "a" "b"
+RPUSH mylist "c" "d"
+LPOP mylist
+RPOP mylist
+LLEN mylist
+LINDEX mylist 1
+LINSERT mylist BEFORE "b" "x"
+LSET mylist 0 "z"
+LRANGE mylist 0 -1
+LREM mylist 1 "a"       # Remove first occurrence
+LTRIM mylist 0 2
+RPOPLPUSH source dest
+BRPOP list1 list2 5     # Blocking right pop
+BLPOP list1 list2 5     # Blocking left pop
+BRPOPLPUSH src dst 5
+
+
+# ============================================
+# 3️⃣ SET (Unordered, unique values)
+# ============================================
+
+SADD myset "a" "b"
+SREM myset "a"
+SISMEMBER myset "a"
+SMEMBERS myset
+SCARD myset
+SPOP myset
+SRANDMEMBER myset
+SDIFF set1 set2
+SDIFFSTORE result set1 set2
+SINTER set1 set2
+SINTERSTORE result set1 set2
+SUNION set1 set2
+SUNIONSTORE result set1 set2
+SMOVE src dst "a"
+
+
+# ============================================
+# 4️⃣ SORTED SET (ZSET: Score-based sorted elements)
+# ============================================
+
+ZADD zset 10 "one" 20 "two"
+ZREM zset "one"
+ZSCORE zset "two"
+ZINCRBY zset 5 "two"
+ZRANGE zset 0 -1 WITHSCORES
+ZREVRANGE zset 0 -1 WITHSCORES
+ZRANGEBYSCORE zset 0 100
+ZREMRANGEBYRANK zset 0 1
+ZREMRANGEBYSCORE zset 0 10
+ZRANK zset "two"
+ZREVRANK zset "two"
+ZCARD zset
+ZCOUNT zset 10 20
+ZPOPMIN zset 1
+ZPOPMAX zset 1
+
+
+# ============================================
+# 5️⃣ HASH (Dictionary-like key-value pairs)
+# ============================================
+
+HSET myhash field1 "val1" field2 "val2"
+HGET myhash field1
+HGETALL myhash
+HDEL myhash field1
+HEXISTS myhash field1
+HINCRBY myhash field1 5
+HINCRBYFLOAT myhash field1 1.5
+HKEYS myhash
+HVALS myhash
+HLEN myhash
+HMSET myhash field1 "val1" field2 "val2"   # Legacy
+HMGET myhash field1 field2
+
+
+# ============================================
+# 6️⃣ BITMAP (Bitwise operations)
+# ============================================
+
+SETBIT bitmap 1 1
+GETBIT bitmap 1
+BITCOUNT bitmap
+BITCOUNT bitmap 0 1
+BITPOS bitmap 1
+BITFIELD bitmap INCRBY i5 100 1
+
+
+# ============================================
+# 7️⃣ HYPERLOGLOG (Approximate unique count)
+# ============================================
+
+PFADD hll user1 user2 user3
+PFCOUNT hll
+PFMERGE hll_merged hll1 hll2
+
+
+# ============================================
+# 8️⃣ GEO (Geospatial indexing)
+# ============================================
+
+GEOADD places 13.361389 38.115556 "Palermo"
+GEOPOS places "Palermo"
+GEODIST places "Palermo" "Catania" km
+GEORADIUS places 15 37 200 km
+GEORADIUSBYMEMBER places "Palermo" 200 km
+GEOHASH places "Palermo"
+
+
+# ============================================
+# 9️⃣ STREAMS (Log of key-value messages)
+# ============================================
+
+XADD mystream * name "Alice" age "30"
+XRANGE mystream - +
+XREVRANGE mystream + -
+XREAD COUNT 2 STREAMS mystream 0
+XGROUP CREATE mystream mygroup $ MKSTREAM
+XREADGROUP GROUP mygroup consumer1 STREAMS mystream >
+XACK mystream mygroup id
+XDEL mystream id
+XLEN mystream
+XINFO STREAM mystream
+
+
+# ============================================
+# 🔁 KEY MANAGEMENT COMMANDS
+# ============================================
+
+DEL key
+EXISTS key
+EXPIRE key 60
+PEXPIRE key 1500
+TTL key
+PTTL key
+RENAME key newkey
+RENAMENX key newkey
+TYPE key
+KEYS pattern
+SCAN 0 MATCH pattern COUNT 10
+
+
+# ============================================
+# 🧪 TRANSACTIONS
+# ============================================
+
+MULTI
+SET key "value"
+INCR counter
+EXEC
+
+DISCARD    # Cancel transaction
+WATCH key  # Optimistic lock
+UNWATCH
+
+
+# ============================================
+# 📣 PUB/SUB (Messaging)
+# ============================================
+
+SUBSCRIBE channel1
+PUBLISH channel1 "Hello, subscribers!"
+UNSUBSCRIBE channel1
+PSUBSCRIBE news.*
+PUNSUBSCRIBE news.*
+
 
